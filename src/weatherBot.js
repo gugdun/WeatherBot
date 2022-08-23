@@ -1,6 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios').default;
 
+const { currentWeather } = require('./util/formatters');
+
 if (process.env.ENV === 'development') {
   const dotenv = require('dotenv');
   dotenv.config();
@@ -38,34 +40,6 @@ bot.on('message', (query) => {
 
   axios
     .get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true&timezone=auto`)
-    .then((res) => bot.sendMessage(chatId, forecast(res.data)))
+    .then((res) => bot.sendMessage(chatId, currentWeather(res.data.current_weather)))
     .catch((reason) => console.log(reason));
 });
-
-function direction(angle) {
-  if (337.5 < angle && angle <= 22.5) {
-    return '⬆';
-  } else if (22.5 < angle && angle <= 67.5) {
-    return '↖';
-  } else if (67.5 < angle && angle <= 112.5) {
-    return '⬅';
-  } else if (112.5 < angle && angle <= 157.5) {
-    return '↙';
-  } else if (157.5 < angle && angle <= 202.5) {
-    return '⬇';
-  } else if (202.5 < angle && angle <= 247.5) {
-    return '↘';
-  } else if (247.5 < angle && angle <= 292.5) {
-    return '➡';
-  } else if (292.5 < angle && angle <= 337.5) {
-    return '↗';
-  }
-}
-
-function forecast(data) {
-  const weather = data.current_weather;
-  return `
-🌡 ${weather.temperature}°
-💨${direction(weather.winddirection)} ${weather.windspeed} km/h
-  `;
-}
