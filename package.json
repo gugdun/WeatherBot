@@ -3,7 +3,17 @@
   "version": "1.0.0",
   "description": "Weather bot for Telegram",
   "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
   "repository": "https://github.com/gugdun/WeatherBot",
   "author": "gugdun",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.58.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
 }
