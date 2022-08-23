@@ -2,7 +2,7 @@
   "name": "weatherbot",
   "version": "1.0.0",
   "description": "Weather bot for Telegram",
-  "main": "src/index.js",
+  "main": "src/weatherBot.js",
   "scripts": {
     "test": "jest",
     "start": "node src/weatherBot.js",
