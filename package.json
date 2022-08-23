@@ -1,5 +1,5 @@
 {
-  "name": "WeatherBot",
+  "name": "weatherbot",
   "version": "1.0.0",
   "description": "Weather bot for Telegram",
   "main": "src/index.js",
