@@ -5,15 +5,18 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "cross-env ENV=development nodemon src/index.js"
   },
   "repository": "https://github.com/gugdun/WeatherBot",
   "author": "gugdun",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.27.2",
     "node-telegram-bot-api": "^0.58.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
     "nodemon": "^2.0.19"
   }
 }
