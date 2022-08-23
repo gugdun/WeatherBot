@@ -1,0 +1,9 @@
+{
+  "name": "WeatherBot",
+  "version": "1.0.0",
+  "description": "Weather bot for Telegram",
+  "main": "src/index.js",
+  "repository": "https://github.com/gugdun/WeatherBot",
+  "author": "gugdun",
+  "license": "MIT"
+}
