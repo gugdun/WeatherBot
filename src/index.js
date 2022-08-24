@@ -16,3 +16,4 @@ if (!token || typeof(token) !== 'string') {
 // Start bot
 const bot = new WeatherBot(require('./messages.js'));
 bot.start(token);
+//
