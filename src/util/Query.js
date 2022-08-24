@@ -1,5 +1,5 @@
 async function parseQuery(query) {
-  // Check input type
+  // Check input values
   if (!query || typeof(query) !== 'string') {
     throw new TypeError();
   }
