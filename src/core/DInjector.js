@@ -8,6 +8,10 @@ module.exports = class DInjector {
     if (!name || typeof(name) !== 'string' || typeof(dep) !== 'function') {
       throw new TypeError();
     }
+    // Check dependency existence
+    if (this.#deps.has(name)) {
+      throw new ReferenceError();
+    }
     // Add dependency
     this.#deps.set(name, dep);
   }

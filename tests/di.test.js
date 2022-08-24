@@ -25,6 +25,12 @@ class TestClass2 {
   }
 }
 
+class TestClass3 {
+  constructor(dep3) {}
+}
+
+class BlankClass {}
+
 describe('Dependency injection test', () => {
   test('Dependency 1', () => {
     const obj = di.inject(TestClass1);
@@ -34,5 +40,21 @@ describe('Dependency injection test', () => {
   test('Dependency 2', () => {
     const obj = di.inject(TestClass2);
     expect(obj.test()).toBe('test');
+  });
+
+  test('Non existing dependency', () => {
+    expect(() => di.inject(TestClass3)).toThrow();
+  });
+
+  test('Class without constructor', () => {
+    expect(() => di.inject(BlankClass)).toThrow();
+  });
+
+  test('Add existing dependency', () => {
+    expect(() => di.add('dep1', () => {})).toThrow();
+  });
+
+  test('Remove non existing dependency', () => {
+    expect(() => di.remove('dep3')).toThrow();
   });
 });
