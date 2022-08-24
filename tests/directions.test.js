@@ -1,5 +1,5 @@
 const { describe, expect, test } = require('@jest/globals');
-const { directions, direction } = require('../src/util/formatters');
+const { directions, direction } = require('../src/util/Format');
 
 describe('Cardinal points formatting', () => {
 
