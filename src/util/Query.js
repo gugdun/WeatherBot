@@ -4,7 +4,7 @@ async function parseQuery(query) {
     throw new TypeError();
   }
   // Split input string and check command syntax
-  let [ command, ...params ] = query.split(' ');
+  let [ command, ...params ] = query.split(/\s+/);
   if (command[0] !== '/') {
     throw new SyntaxError();
   }

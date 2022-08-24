@@ -1,7 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const MessageDispatcher = require('./MessageDispatcher');
 
-const { parseQuery } = require('../util/queryParser');
+const { parseQuery } = require('../util/Query');
 
 const options = {
   polling: true
