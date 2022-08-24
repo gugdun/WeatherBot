@@ -37,12 +37,14 @@ function direction(angle) {
 }
 
 function currentWeather(data) {
+  // Check input data
   if (!Number.isFinite(data.temperature)) data.temperature = 'Unknown';
   if (!Number.isFinite(data.windspeed)) data.windspeed = 'Unknown';
-
+  else data.windspeed += ' km/h';
+  // Return formatted string
   return `
 🌡 ${data.temperature}°
-💨${direction(data.winddirection)} ${data.windspeed} km/h
+💨${direction(data.winddirection)} ${data.windspeed}
   `;
 }
 

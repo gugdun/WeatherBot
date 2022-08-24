@@ -5,8 +5,8 @@
   "main": "src/weatherBot.js",
   "scripts": {
     "test": "jest",
-    "start": "node src/weatherBot.js",
-    "dev": "cross-env ENV=development nodemon src/weatherBot.js"
+    "start": "node src/index.js",
+    "dev": "cross-env ENV=development nodemon src/index.js"
   },
   "repository": "https://github.com/gugdun/WeatherBot",
   "author": "gugdun",
