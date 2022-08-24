@@ -13,7 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.27.2",
-    "node-telegram-bot-api": "^0.58.0"
+    "node-telegram-bot-api": "^0.58.0",
+    "sequelize": "^6.21.4"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
