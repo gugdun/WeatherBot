@@ -24,6 +24,14 @@ module.exports = class WeatherBot {
     this.#bot.on('message', this.#onMessage.bind(this));
   }
 
+  add(command, callback) {
+    this.#dispatcher.add(command, callback);
+  }
+
+  remove(command) {
+    this.#dispatcher.remove(command);
+  }
+
   async #onMessage(message) {
     const chatId = message.chat.id;
     const userId = message.from.id;
