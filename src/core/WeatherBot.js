@@ -42,10 +42,11 @@ module.exports = class WeatherBot {
     // Parse query and execute specified command
     parseQuery(message.text)
       .then(async parsed => {
-        const command = this.#dispatcher.get(parsed.command);
-        await command({ userId, params: parsed.params }, { sendMessage });
+        const { context, method } = this.#dispatcher.get(parsed.command);
+        await context[method]({ userId, params: parsed.params }, { sendMessage });
       })
       .catch(error => {
+        console.log(error);
         sendMessage('No such command');
       });
   }

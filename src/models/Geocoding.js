@@ -15,6 +15,11 @@ module.exports = class Geocoding {
     url.searchParams.append('name', name);
     // Execute API request
     const response = await axios.get(url.toString());
-    return response.data?.results; // Check emptiness
+    const results = response.data?.results;
+    // Check results and return most relevant
+    if (!results || !Array.isArray(results) || results.length === 0) {
+      throw new ReferenceError();
+    }
+    return results[0];
   }
 };

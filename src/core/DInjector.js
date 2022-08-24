@@ -44,6 +44,7 @@ module.exports = class DInjector {
     try {
       return new target(...params.map(dep => this.#deps.get(dep)()));
     } catch (e) {
+      console.log(e);
       throw new ReferenceError();
     }
   }

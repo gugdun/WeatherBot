@@ -1,20 +1,27 @@
-const Geocoding = require('../models/Geocoding');
-const geocoding = new Geocoding();
+const di = require('../deps');
+const format = require('../util/Format');
 
-async function now(req, res) {
-  try {
-    let coords = await geocoding.getCoordinates(req.params?.join(' '));
-    res.sendMessage(`Showing current weather in ${req.params?.join(' ')}`);
-  } catch {
-    res.sendMessage(`Wrong city name!`);
+module.exports = di.inject(class ForecastController {
+  #forecasts = undefined;
+  #geocoding = undefined;
+
+  constructor(forecasts, geocoding) {
+    this.#forecasts = forecasts;
+    this.#geocoding = geocoding;
   }
-}
 
-async function tomorrow(req, res) {
-  res.sendMessage(`Showing tomorrow weather`);
-}
+  async now(req, res) {
+    try {
+      const coords = await this.#geocoding.getCoordinates(req.params?.join(' '));
+      const forecast = await this.#forecasts.currentWeather(coords);
+      res.sendMessage(format.currentWeather(forecast));
+    } catch (e) {
+      console.log(e);
+      res.sendMessage(`Wrong city name!`);
+    }
+  }
 
-module.exports = {
-  now,
-  tomorrow
-};
+  async tomorrow(req, res) {
+    res.sendMessage(`Showing tomorrow weather`);
+  }
+});

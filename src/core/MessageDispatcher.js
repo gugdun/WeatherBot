@@ -1,10 +1,12 @@
 module.exports = class MessageDispatcher {
   #mappings = new Map();
 
-  add(command, callback) {
+  add(command, context, method) {
     // Check input types
     if (typeof(command) !== 'string' ||
-        typeof(callback) !== 'function')
+        typeof(context) !== 'object' ||
+        typeof(method) !== 'string' ||
+        !Reflect.has(context, method))
     {
       throw new TypeError();
     }
@@ -13,7 +15,7 @@ module.exports = class MessageDispatcher {
       throw new ReferenceError();
     }
     // Create mapping
-    this.#mappings.set(command, callback);
+    this.#mappings.set(command, { context, method });
   }
 
   remove(command) {
