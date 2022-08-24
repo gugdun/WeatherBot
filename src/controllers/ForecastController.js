@@ -14,7 +14,7 @@ module.exports = di.inject(class ForecastController {
     try {
       const coords = await this.#geocoding.getCoordinates(req.params?.join(' '));
       const forecast = await this.#forecasts.currentWeather(coords);
-      res.sendMessage(format.currentWeather(forecast));
+      res.sendMessage(format.currentWeather(coords.name, forecast));
     } catch (e) {
       console.log(e);
       res.sendMessage(`Wrong city name!`);
