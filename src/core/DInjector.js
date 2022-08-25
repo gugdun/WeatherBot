@@ -1,10 +1,14 @@
 const rgParams = /(?:constructor)(\((?:\s*[\$\w]+\s*,?)*\))/;
 const rgComments = /\/\*\*(.|\n|\r)+?\*\//g;
 
+/**
+ * @typedef {() => object} FactoryMethod
+ */
+
 module.exports = class DInjector {
   #deps = new Map();
 
-  add(name, dep) {
+  add(name, /** @type {FactoryMethod} */ dep) {
     // Check input
     if (!name || typeof(name) !== 'string' || typeof(dep) !== 'function') {
       throw new TypeError();

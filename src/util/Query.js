@@ -1,3 +1,5 @@
+const ParsedQuery = require('../entities/ParsedQuery');
+
 async function parseQuery(query) {
   // Check input values
   if (!query || typeof(query) !== 'string') {
@@ -9,10 +11,7 @@ async function parseQuery(query) {
     throw new SyntaxError();
   }
   // Return parsed query
-  return {
-    command: command.replace('/', ''),
-    params
-  }
+  return new ParsedQuery({ command: command.replace('/', ''), params });
 }
 
 module.exports = {

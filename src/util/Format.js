@@ -1,3 +1,5 @@
+const CurrentWeather = require("../entities/CurrentWeather");
+
 const directions = {
   north: '\u{2b06}',
   northEast: '\u{2197}',
@@ -84,7 +86,7 @@ function weatherCode(code) {
   }
 }
 
-function currentWeather(city, data) {
+function currentWeather(city, /** @type {CurrentWeather} */ data) {
   // Check input data
   if (!Number.isFinite(data.temperature)) data.temperature = 'Unknown';
   if (!Number.isFinite(data.windspeed)) data.windspeed = 'Unknown';

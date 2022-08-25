@@ -1,3 +1,9 @@
+/**
+ * @typedef {Object} ControllerMethod
+ * @property {any} context Method context
+ * @property {string} method Method name
+ */
+
 module.exports = class MessageDispatcher {
   #mappings = new Map();
 
@@ -27,6 +33,7 @@ module.exports = class MessageDispatcher {
     this.#mappings.delete(command);
   }
 
+  /** @returns {ControllerMethod} */
   get(command) {
     // Check callback existence
     if (!this.#mappings.has(command)) {

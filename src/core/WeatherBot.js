@@ -1,5 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const MessageDispatcher = require('./MessageDispatcher');
+const Request = require('../entities/Request');
+const Response = require('../entities/Response');
 
 const { parseQuery } = require('../util/Query');
 
@@ -8,8 +10,8 @@ const options = {
 };
 
 module.exports = class WeatherBot {
-  #bot = undefined;
-  #dispatcher = undefined;
+  /** @type {TelegramBot} */ #bot;
+  /** @type {MessageDispatcher} */ #dispatcher;
 
   constructor(dispatcher) {
     if (dispatcher) {
@@ -32,7 +34,7 @@ module.exports = class WeatherBot {
     this.#dispatcher.remove(command);
   }
 
-  async #onMessage(message) {
+  async #onMessage(/** @type {TelegramBot.Message} */ message) {
     const chatId = message.chat.id;
     const userId = message.from.id;
     // TelegramBot.sendMessage wrapper
@@ -43,7 +45,10 @@ module.exports = class WeatherBot {
     parseQuery(message.text)
       .then(async parsed => {
         const { context, method } = this.#dispatcher.get(parsed.command);
-        await context[method]({ userId, params: parsed.params }, { sendMessage });
+        await context[method](
+          new Request({ userId, params: parsed.params }),
+          new Response({ sendMessage })
+        );
       })
       .catch(error => {
         console.log(error);

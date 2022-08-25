@@ -1,6 +1,8 @@
 const { URL } = require('node:url');
 const axios = require('axios').default;
 
+const Coordinates = require('../entities/Coordinates');
+
 const base = 'https://geocoding-api.open-meteo.com/v1/search';
 const rgCityName = /^[A-Z \-]+$/i;
 
@@ -20,6 +22,6 @@ module.exports = class Geocoding {
     if (!results || !Array.isArray(results) || results.length === 0) {
       throw new ReferenceError();
     }
-    return results[0];
+    return new Coordinates(results[0]);
   }
 };
