@@ -1,4 +1,5 @@
-const rgParams = /(?!constructor)(?:\((?:\s?[\$\w]+\s?,?)*\))/;
+const rgParams = /(?:constructor)(\((?:\s*[\$\w]+\s*,?)*\))/;
+const rgComments = /\/\*\*(.|\n|\r)+?\*\//g;
 
 module.exports = class DInjector {
   #deps = new Map();
@@ -35,11 +36,13 @@ module.exports = class DInjector {
       throw new TypeError();
     }
     // Get constructor parameters
-    let params = target.prototype.constructor.toString().match(rgParams);
+    let params = target.prototype.constructor.toString();
+    params = params.replaceAll(rgComments, '');
+    params = params.match(rgParams);
     if (!params) {
       throw new TypeError();
     }
-    params = params[0].replaceAll(/[\(\)]/g, '').split(/[\s,]+/);
+    params = params[1].replaceAll(/[\(\s\)]/g, '').split(',');
     // Create instance with required dependencies
     try {
       return new target(...params.map(dep => this.#deps.get(dep)()));

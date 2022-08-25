@@ -1,12 +1,19 @@
-function create(req, res) {
-  res.sendMessage(`User ${req.userId} was created!`);
-}
+const di = require('../deps');
+const Users = require('../models/Users');
 
-function remove(req, res) {
-  res.sendMessage(`User ${req.userId} was removed!`);
-}
+module.exports = di.inject(class UserController {
+  /** @type {Users} */
+  #users = undefined;
 
-module.exports = {
-  create,
-  remove
-};
+  constructor(/** @type {Users} */ users) {
+    this.#users = users;
+  }
+
+  async create(req, res) {
+    res.sendMessage(`User ${req.userId} was created!`);
+  }
+
+  async remove(req, res) {
+    res.sendMessage(`User ${req.userId} was removed!`);
+  }
+});

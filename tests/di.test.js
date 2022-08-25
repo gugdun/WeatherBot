@@ -6,23 +6,13 @@ di.add('dep1', () => { return { param: 42 } });
 di.add('dep2', () => { return { param: 'test' } });
 
 class TestClass1 {
-  constructor(dep1) {
-    this.dep = dep1;
-  }
-
-  test() {
-    return this.dep.param;
-  }
+  constructor(dep1) { this.dep = dep1; }
+  test() { return this.dep.param; }
 }
 
 class TestClass2 {
-  constructor(dep2) {
-    this.dep = dep2;
-  }
-
-  test() {
-    return this.dep.param;
-  }
+  constructor(dep2) { this.dep = dep2; }
+  test() { return this.dep.param; }
 }
 
 class TestClass3 {
@@ -30,6 +20,11 @@ class TestClass3 {
 }
 
 class BlankClass {}
+
+class WithComments {
+  constructor(/** @type {object} */ dep1) { this.dep = dep1; }
+  test() { return this.dep.param; }
+}
 
 describe('Dependency injection test', () => {
   test('Dependency 1', () => {
@@ -56,5 +51,10 @@ describe('Dependency injection test', () => {
 
   test('Remove non existing dependency', () => {
     expect(() => di.remove('dep3')).toThrow();
+  });
+
+  test('Comment in parameter list', () => {
+    const obj = di.inject(WithComments);
+    expect(obj.test()).toBe(42);
   });
 });
