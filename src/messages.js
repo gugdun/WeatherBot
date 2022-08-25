@@ -6,6 +6,7 @@ const messages = new MessageDispatcher();
 
 messages.add('start', UserController, 'create');
 messages.add('stop', UserController, 'remove');
+messages.add('location', UserController, 'setLocation');
 messages.add('now', ForecastController, 'now');
 messages.add('tomorrow', ForecastController, 'tomorrow');
 

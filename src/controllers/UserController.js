@@ -18,4 +18,8 @@ module.exports = di.inject(class UserController {
   async remove(/** @type {Request} */ req, /** @type {Response} */ res) {
     res.sendMessage(`User ${req.userId} was removed!`);
   }
+
+  async setLocation(/** @type {Request} */ req, /** @type {Response} */ res) {
+    res.sendMessage(`User ${req.userId} location was changed!`);
+  }
 });

@@ -42,7 +42,7 @@ module.exports = class WeatherBot {
       this.#bot.sendMessage(chatId, message);
     }.bind(this);
     // Parse query and execute specified command
-    parseQuery(message.text)
+    parseQuery(message)
       .then(async parsed => {
         const { context, method } = this.#dispatcher.get(parsed.command);
         await context[method](
