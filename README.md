@@ -19,6 +19,7 @@ Run WeatherBot in production:
 ~~~
 docker run \
   -e TOKEN=your_api_token \
+  -e DATABASE=database_connection_string \
   weatherbot -d
 ~~~
 
@@ -26,6 +27,7 @@ docker run \
 1. Create `.env` file at the root of the project:
 ~~~
 TOKEN=your_api_token
+DATABASE=database_connection_string
 ~~~
 2. Install dependencies:
 ~~~
