@@ -30,11 +30,25 @@ module.exports = di.inject(class ForecastController {
       res.sendMessage(format.currentWeather(coords.name, forecast));
     } catch (e) {
       console.log(e);
-      res.sendMessage(`Wrong city name!`);
+      res.sendMessage(`Please send your geolocation or specify the city name!`);
     }
   }
 
   async tomorrow(/** @type {Request} */ req, /** @type {Response} */ res) {
-    res.sendMessage(`Showing tomorrow weather`);
+    try {
+      let coords;
+      if (req.params.length === 0) {
+        coords = await this.#users.getLocation(req.userId);
+      } else {
+        coords = await this.#geocoding.getCoordinates(req.params.join(' '));
+      }
+      const tomorrow = new Date(Date.now());
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const forecast = await this.#forecasts.dailyWeather(coords, tomorrow);
+      res.sendMessage(format.dailyWeather(coords.name, forecast));
+    } catch (e) {
+      console.log(e);
+      res.sendMessage(`Please send your geolocation or specify the city name!`);
+    }
   }
 });

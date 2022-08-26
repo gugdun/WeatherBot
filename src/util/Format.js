@@ -1,4 +1,5 @@
 const CurrentWeather = require("../entities/CurrentWeather");
+const DailyWeather = require("../entities/DailyWeather");
 
 const directions = {
   north: '\u{2b06}',
@@ -94,8 +95,22 @@ function currentWeather(city, /** @type {CurrentWeather} */ data) {
   // Return formatted string
   return `
 Weather in ${city} now ${weatherCode(data.weathercode)}
-🌡 ${data.temperature}° C
-💨${direction(data.winddirection)} ${data.windspeed}
+\u{1f321} ${data.temperature}° C
+\u{1f4a8}${direction(data.winddirection)} ${data.windspeed}
+  `;
+}
+
+function dailyWeather(city, /** @type {DailyWeather} */ data) {
+  // Check input data
+  if (!Number.isFinite(data.temperature_max)) data.temperature_max = 'Unknown';
+  if (!Number.isFinite(data.temperature_min)) data.temperature_min = 'Unknown';
+  if (!Number.isFinite(data.windspeed_max)) data.windspeed_max = 'Unknown';
+  else data.windspeed_max += ' km/h';
+  // Return formatted string
+  return `
+Tomorrow's weather in ${city} ${weatherCode(data.weathercode)}
+\u{1f321} ${data.temperature_min}-${data.temperature_max}° C
+\u{1f4a8}${direction(data.winddirection_dominant)} ${data.windspeed_max}
   `;
 }
 
@@ -103,5 +118,6 @@ module.exports = {
   directions,
   direction,
   weatherCode,
-  currentWeather
+  currentWeather,
+  dailyWeather
 };
