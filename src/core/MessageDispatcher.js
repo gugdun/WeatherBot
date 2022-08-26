@@ -1,18 +1,10 @@
-/**
- * @typedef {Object} ControllerMethod
- * @property {any} context Method context
- * @property {string} method Method name
- */
-
 module.exports = class MessageDispatcher {
   #mappings = new Map();
 
-  add(command, context, method) {
+  add(command, first, ...rest) {
     // Check input types
     if (typeof(command) !== 'string' ||
-        typeof(context) !== 'object' ||
-        typeof(method) !== 'string' ||
-        !Reflect.has(context, method))
+        typeof(first) !== 'function')
     {
       throw new TypeError();
     }
@@ -21,7 +13,7 @@ module.exports = class MessageDispatcher {
       throw new ReferenceError();
     }
     // Create mapping
-    this.#mappings.set(command, { context, method });
+    this.#mappings.set(command, { first, rest });
   }
 
   remove(command) {
@@ -33,7 +25,6 @@ module.exports = class MessageDispatcher {
     this.#mappings.delete(command);
   }
 
-  /** @returns {ControllerMethod} */
   get(command) {
     // Check callback existence
     if (!this.#mappings.has(command)) {

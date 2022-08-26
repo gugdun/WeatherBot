@@ -16,6 +16,11 @@ const options = {
 module.exports = class WeatherBot {
   /** @type {TelegramBot} */ #bot;
   /** @type {MessageDispatcher} */ #dispatcher;
+
+  /** @type {Request} */ #request;
+  /** @type {Response} */ #response;
+  /** @type {TelegramBot.Message} */ #message;
+  /** @type {number} */ #currentMiddleware;
   #middleware = [];
 
   constructor(dispatcher) {
@@ -48,36 +53,56 @@ module.exports = class WeatherBot {
     this.#dispatcher.remove(command);
   }
 
-  async #onMessage(/** @type {TelegramBot.Message} */ message) {
+  #callMiddleware() {
+    this.#middleware[this.#currentMiddleware](
+      this.#request,
+      this.#response,
+      this.#next.bind(this)
+    );
+  }
+
+  #callMethod() {
+    parseQuery(this.#message)
+      .then(parsed => {
+        this.#request.params = parsed.params;
+        const { first, rest } = this.#dispatcher.get(parsed.command);
+        // Traverse the local middleware stack
+        let current = -1;
+        const next = function() {
+          current++;
+          if (!rest[current]) return;
+          rest[current](this.#request, this.#response, next);
+        }.bind(this);
+        first(this.#request, this.#response, next);
+      })
+      .catch(error => {
+        console.log(error);
+        this.#response.sendMessage('No such command.');
+      });
+  }
+
+  #next() {
+    this.#currentMiddleware++;
+    if (this.#middleware[this.#currentMiddleware]) {
+      this.#callMiddleware();
+    } else {
+      this.#callMethod();
+    }
+  }
+
+  #onMessage(/** @type {TelegramBot.Message} */ message) {
     const chatId = message.chat.id;
     const userId = message.from.id;
     // TelegramBot.sendMessage wrapper
     const sendMessage = function(message) {
       this.#bot.sendMessage(chatId, message);
     }.bind(this);
-    // Request and Response objects
-    const request = { userId };
-    const response = { sendMessage };
-    // Call middleware
-    let currentMiddleware = 0;
-    const next = function() {
-      currentMiddleware++;
-      if (!this.#middleware[currentMiddleware]) return;
-      this.#middleware[currentMiddleware](request, response, next);
-    }.bind(this);
-    if (this.#middleware.length > 0) {
-      this.#middleware[0](request, response, next);
-    }
-    // Parse query and execute specified command
-    parseQuery(message)
-      .then(async parsed => {
-        request.params = parsed.params;
-        const { context, method } = this.#dispatcher.get(parsed.command);
-        await context[method](request, response);
-      })
-      .catch(error => {
-        console.log(error);
-        sendMessage('No such command');
-      });
+    // Create Request and Response objects
+    this.#request = new Request({ userId });
+    this.#response = new Response({ sendMessage });
+    // Traverse the global middleware stack
+    this.#message = message;
+    this.#currentMiddleware = -1;
+    this.#next();
   }
 }
