@@ -30,7 +30,7 @@ class Users extends Model {
   static async getLocation(id) {
     const user = await Users.findByPk(id);
     return new Coordinates({
-      name: undefined,
+      name: 'your location',
       latitude: user.latitude,
       longitude: user.longitude
     });
